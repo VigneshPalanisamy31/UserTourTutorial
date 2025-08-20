@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Title>UserTour</Title>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Soliton Technologies</Authors>
+    <Version>1.1.3</Version>
+    <PackageId>WPFUserTourCust</PackageId>
+    <Product>WPFUserTourCust</Product>
+  </PropertyGroup>
+
+</Project>
