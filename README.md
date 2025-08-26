@@ -40,11 +40,14 @@ It provides an easy-to-use UI with checkboxes to select which steps to migrate, 
 
 ## Snapshots
 - Browse your script directory.
- ![Directory Browsing](images/Directory%20Browsing.png)
+  
+   ![Directory Browsing](Images/Directory%20Browsing.png)
 - Scan your XML Scripts
- ![Script Scanning](images/Script%20Scanning.png)
+
+   ![Script Scanning](Images/Script%20Scanning.png)
 - Select the steps you wish to convert.
- ![Step Selection](images/Step%20Selection.png)
+
+   ![Step Selection](Images/Step%20Selection.png)
 - The migrated steps will be saved to the `Migrated` directory.
 ---
 
