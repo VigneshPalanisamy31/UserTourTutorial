@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBaseStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BaseStep xsi:type="NewStepModel">
+    <NewId>1</NewId>
+    <ActionName>Initialize Database</ActionName>
+    <Config>
+      <Parameter>
+        <Key>ConnectionString</Key>
+        <Value>Server=localhost;Database=TestDB;</Value>
+      </Parameter>
+      <Parameter>
+        <Key>RetryCount</Key>
+        <Value>3</Value>
+      </Parameter>
+    </Config>
+    <MigratedAt>2025-08-26T12:30:28</MigratedAt>
+    <MigratedBy>vignesh.palanisamy</MigratedBy>
+  </BaseStep>
+  <BaseStep xsi:type="StepModel">
+    <Id>2</Id>
+    <Name>Import Data</Name>
+    <Type>DataLoad</Type>
+    <Parameters>
+      <Parameter>
+        <Key>SourceFile</Key>
+        <Value>input.csv</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Delimiter</Key>
+        <Value>,</Value>
+      </Parameter>
+    </Parameters>
+  </BaseStep>
+  <BaseStep xsi:type="NewStepModel">
+    <NewId>3</NewId>
+    <ActionName>Validate Records</ActionName>
+    <Config>
+      <Parameter>
+        <Key>RuleSet</Key>
+        <Value>DefaultRules</Value>
+      </Parameter>
+    </Config>
+    <MigratedAt>2025-08-26T12:30:28</MigratedAt>
+    <MigratedBy>vignesh.palanisamy</MigratedBy>
+  </BaseStep>
+  <BaseStep xsi:type="StepModel">
+    <Id>4</Id>
+    <Name>Export Results</Name>
+    <Type>Export</Type>
+    <Parameters>
+      <Parameter>
+        <Key>TargetFile</Key>
+        <Value>output.json</Value>
+      </Parameter>
+    </Parameters>
+  </BaseStep>
+</ArrayOfBaseStep>

@@ -1,0 +1,57 @@
+<ArrayOfStepModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StepModel>
+    <Id>101</Id>
+    <Name>Configure Server</Name>
+    <Type>Initialization</Type>
+    <Parameters>
+      <Parameter>
+        <Key>Host</Key>
+        <Value>192.168.1.10</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Port</Key>
+        <Value>5432</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>102</Id>
+    <Name>Load User Data</Name>
+    <Type>DataImport</Type>
+    <Parameters>
+      <Parameter>
+        <Key>FilePath</Key>
+        <Value>users.xml</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Encoding</Key>
+        <Value>UTF-8</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>103</Id>
+    <Name>Check Integrity</Name>
+    <Type>Verification</Type>
+    <Parameters>
+      <Parameter>
+        <Key>Schema</Key>
+        <Value>UserSchema</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>104</Id>
+    <Name>Save Report</Name>
+    <Type>Output</Type>
+    <Parameters>
+      <Parameter>
+        <Key>Destination</Key>
+        <Value>report.xml</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+</ArrayOfStepModel>

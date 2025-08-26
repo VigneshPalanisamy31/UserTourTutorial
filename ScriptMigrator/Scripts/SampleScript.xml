@@ -1,0 +1,58 @@
+<ArrayOfStepModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StepModel>
+    <Id>1</Id>
+    <Name>Initialize Database</Name>
+    <Type>Setup</Type>
+    <Parameters>
+      <Parameter>
+        <Key>ConnectionString</Key>
+        <Value>Server=localhost;Database=TestDB;</Value>
+      </Parameter>
+      <Parameter>
+        <Key>RetryCount</Key>
+        <Value>3</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>2</Id>
+    <Name>Import Data</Name>
+    <Type>DataLoad</Type>
+    <Parameters>
+      <Parameter>
+        <Key>SourceFile</Key>
+        <Value>input.csv</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Delimiter</Key>
+        <Value>,</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>3</Id>
+    <Name>Validate Records</Name>
+    <Type>Validation</Type>
+    <Parameters>
+      <Parameter>
+        <Key>RuleSet</Key>
+        <Value>DefaultRules</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+
+  <StepModel>
+    <Id>4</Id>
+    <Name>Export Results</Name>
+    <Type>Export</Type>
+    <Parameters>
+      <Parameter>
+        <Key>TargetFile</Key>
+        <Value>output.json</Value>
+      </Parameter>
+    </Parameters>
+  </StepModel>
+</ArrayOfStepModel>

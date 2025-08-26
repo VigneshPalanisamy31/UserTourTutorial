@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBaseStep xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BaseStep xsi:type="StepModel">
+    <Id>101</Id>
+    <Name>Configure Server</Name>
+    <Type>Initialization</Type>
+    <Parameters>
+      <Parameter>
+        <Key>Host</Key>
+        <Value>192.168.1.10</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Port</Key>
+        <Value>5432</Value>
+      </Parameter>
+    </Parameters>
+  </BaseStep>
+  <BaseStep xsi:type="NewStepModel">
+    <NewId>102</NewId>
+    <ActionName>Load User Data</ActionName>
+    <Config>
+      <Parameter>
+        <Key>FilePath</Key>
+        <Value>users.xml</Value>
+      </Parameter>
+      <Parameter>
+        <Key>Encoding</Key>
+        <Value>UTF-8</Value>
+      </Parameter>
+    </Config>
+    <MigratedAt>2025-08-26T12:30:28</MigratedAt>
+    <MigratedBy>vignesh.palanisamy</MigratedBy>
+  </BaseStep>
+  <BaseStep xsi:type="StepModel">
+    <Id>103</Id>
+    <Name>Check Integrity</Name>
+    <Type>Verification</Type>
+    <Parameters>
+      <Parameter>
+        <Key>Schema</Key>
+        <Value>UserSchema</Value>
+      </Parameter>
+    </Parameters>
+  </BaseStep>
+  <BaseStep xsi:type="NewStepModel">
+    <NewId>104</NewId>
+    <ActionName>Save Report</ActionName>
+    <Config>
+      <Parameter>
+        <Key>Destination</Key>
+        <Value>report.xml</Value>
+      </Parameter>
+    </Config>
+    <MigratedAt>2025-08-26T12:30:28</MigratedAt>
+    <MigratedBy>vignesh.palanisamy</MigratedBy>
+  </BaseStep>
+</ArrayOfBaseStep>
