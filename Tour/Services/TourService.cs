@@ -18,6 +18,8 @@ namespace Tour.Services
         private readonly List<TourStep> _steps;
         private int _currentIndex = -1;
         private readonly ITourOverlay _overlay;
+        int _retryCount = 0;
+        const int _maxRetries = 10;
 
         public TourService(FrameworkElement parent, List<TourStep> steps, ITourOverlay? overlay = null)
         {
@@ -76,8 +78,6 @@ namespace Tour.Services
         /// Displays a particular tour step by index
         /// </summary>
         /// <param name="index">Index of the step to display</param>
-         int _retryCount = 0;
-         const int _maxRetries = 10;
         private void ShowStep(int index)
         {
 
@@ -90,7 +90,7 @@ namespace Tour.Services
             var window = Window.GetWindow(_parent);
             if (window == null) return;
 
-            var element = FindChildByNameAndTag(window, step.ElementName, step.Tag);
+            var element =HighlightService.FindChildByNameAndTag(window, step.ElementName, step.Tag);
 
             if (element == null)
             {
@@ -110,7 +110,7 @@ namespace Tour.Services
                 return;
             }
 
-            PositionHighlight(step);
+            HighlightService.PositionHighlight(step,_overlay,_parent);
 
             _overlay.PrevButton.IsEnabled = _currentIndex > 0;
             _overlay.NextButton.Content = _currentIndex < _steps.Count - 1 ? "Next" : "Finish";
@@ -125,87 +125,8 @@ namespace Tour.Services
         {
             if (_currentIndex >= 0 && _currentIndex < _steps.Count)
             {
-                PositionHighlight(_steps[_currentIndex]);
+               HighlightService.PositionHighlight(_steps[_currentIndex],_overlay, _parent);
             }
-        }
-
-        /// <summary>
-        /// Highlights the control,positions an overlay glow around it and displays the tooltip.
-        /// </summary>
-        /// <param name="step">The tour step definition</param>
-        private void PositionHighlight(TourStep step)
-        {
-            var window = Window.GetWindow(_parent);
-            if (window == null) return;
-            var element = FindChildByNameAndTag(window, step.ElementName, step.Tag);
-            if (element == null) return;
-            var pos = element.TransformToAncestor(window).Transform(new Point(0, 0));
-            double width = element.ActualWidth;
-            double height = element.ActualHeight;
-
-            // Position highlight glow
-            _overlay.HighlightBorder.Width = width + 7;
-            _overlay.HighlightBorder.Height = height + 7;
-            Canvas.SetLeft(_overlay.HighlightBorder, pos.X - 3);
-            Canvas.SetTop(_overlay.HighlightBorder, pos.Y - 3);
-
-            // Create mask
-            CreateOverlayMask(pos, width, height);
-
-            _overlay.StepTitle.Text = step.Title;
-            _overlay.StepDescription.Text = step.Description;
-            double tooltipX = pos.X + width + 10;
-            double tooltipY = pos.Y;
-            double tooltipWidth = _overlay.TooltipPanel.ActualWidth > 0
-                ? _overlay.TooltipPanel.ActualWidth
-                : _overlay.TooltipPanel.Width;
-            double tooltipHeight = _overlay.TooltipPanel.ActualHeight > 0
-                ? _overlay.TooltipPanel.ActualHeight
-                : _overlay.TooltipPanel.Height;
-            double windowWidth = window.ActualWidth;
-            double windowHeight = window.ActualHeight;
-
-            if (tooltipX + tooltipWidth > windowWidth)
-                tooltipX = pos.X - tooltipWidth - 10;
-
-            if (tooltipY + tooltipHeight > windowHeight)
-                tooltipY = windowHeight - tooltipHeight - 10;
-
-            if (tooltipY < 0)
-                tooltipY = 10;
-            Canvas.SetLeft(_overlay.TooltipPanel, tooltipX);
-            Canvas.SetTop(_overlay.TooltipPanel, tooltipY);
-        }
-
-        /// <summary>
-        /// Updates the overlay's opacity mask to darken the full window while leaving a transparent hole over the highlighted area
-        /// </summary>
-        /// <param name="highlightPosition">The position of the highlighted control</param>
-        /// <param name="width">Width of the highlight rectangle</param>
-        /// <param name="height">Height of the highlight rectangle</param>
-        private void CreateOverlayMask(Point highlightPosition, double width, double height)
-        {
-            var overlay = _overlay.DarkOverlay;
-            if (overlay.ActualWidth == 0 || overlay.ActualHeight == 0)
-                return;
-
-            RectangleGeometry fullRect = new RectangleGeometry(new Rect(0, 0, overlay.ActualWidth, overlay.ActualHeight));
-            RectangleGeometry holeRect = new RectangleGeometry(new Rect(highlightPosition.X, highlightPosition.Y, width, height));
-            CombinedGeometry combined = new CombinedGeometry(GeometryCombineMode.Exclude, fullRect, holeRect);
-            GeometryDrawing drawing = new GeometryDrawing
-            {
-                Geometry = combined,
-                Brush = Brushes.White
-            };
-            var brush = new DrawingBrush
-            {
-                Drawing = drawing,
-                AlignmentX = AlignmentX.Left,
-                AlignmentY = AlignmentY.Top,
-                ViewboxUnits = BrushMappingMode.Absolute,
-                Viewbox = new Rect(0, 0, overlay.ActualWidth, overlay.ActualHeight)
-            };
-            (_overlay.DarkOverlay.OpacityMask as DrawingBrush).Drawing = drawing;
         }
 
         /// <summary>
@@ -225,34 +146,5 @@ namespace Tour.Services
             fadeOut.Begin(_overlay as FrameworkElement);
         }
 
-        /// <summary>
-        /// Recursively searches the visual tree to find a FrameworkElement matching a name and an optional tag value
-        /// </summary>
-        /// <param name="parent">Parent element to search from</param>
-        /// <param name="name">Name of the target child</param>
-        /// <param name="tag">Optional tag to match</param>
-        /// <returns>The matching framework element if found, else null</returns>
-        private FrameworkElement FindChildByNameAndTag(DependencyObject parent, string name, object tag = null)
-        {
-            if (parent == null) return null;
-
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is FrameworkElement fe)
-                {
-                    bool nameMatches = fe.Name == name;
-                    bool tagMatches = (tag == null || fe.Tag?.ToString() == tag.ToString());
-
-                    if (nameMatches && tagMatches)
-                        return fe;
-                }
-                var result = FindChildByNameAndTag(child, name, tag);
-                if (result != null)
-                    return result;
-            }
-            return null;
-        }
     }
 }
